@@ -1,0 +1,28 @@
+name: Lint and test code
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build containers
+        run: docker compose -f docker-compose.ci.yml -p assessment_app build --build-arg DEV_DEPS=True
+
+      - name: Up containers
+        run: docker compose -f docker-compose.ci.yml -p assessment_app up -d --remove-orphans
+
+      - name: Lint
+        run: docker exec -i assessment_app-api-1 make -C src lint
+
+      - name: Tests
+        run: docker exec -i assessment_app-api-1 make -C src test
+
+      - name: Down containers
+        run: docker compose -f docker-compose.ci.yml -p assessment_app down -v

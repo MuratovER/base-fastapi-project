@@ -1,0 +1,117 @@
+@startuml
+entity ReviewStatusEnum{
+PENDING
+DRAFT
+COMPLETED
+}
+
+entity UserRoleEnum{
+EMPLOYER
+LEAD
+MENTOR
+ADMIN
+}
+
+entity Quarter {
+*id
+__
+*is_active: bool
+*started_at: datetime
+*finished_at: datetime
+}
+
+
+entity Review {
+*id
+__
+*evaluated_user_id: number <<FK>>
+*reviewer_id: number <<FK>>
+*template_id: number <<FK>>
+*initiated_by: number <<FK>>
+*quarter_id: number <<FK>>
+created_at: datetime <<generated>>
+updated_at: datetime <<generated>>
+status: ReviewStatusEnum <<default: PENDING>>
+}
+
+entity Template {
+*id
+__
+*name: text
+is_archived: bool <<default: False>>
+created_at: datetime <<generated>>
+updated_at: datetime <<generated>>
+}
+
+entity Question {
+*id
+__
+*template_id: number <<FK>>
+*text: text
+description: text
+}
+
+entity Answer{
+*id
+__
+*reviewer_id: number <<FK>>
+*question_id: number <<FK>>
+*reviewer_id: number <<FK>>
+*text: text
+}
+
+entity DepartmentTemplate{
+*id
+__
+*department_id: number <<FK>>
+*template_id: number <<FK>>
+}
+
+entity Department{
+*id
+__
+*name: text
+}
+
+entity DepartmentUser{
+*id
+__
+*user_id: number <<FK>>
+*department_id: number <<FK>>
+}
+
+entity User{
+*id
+__
+*mentored_by: number <<FK>>
+*email: text
+*username: text
+*password: text
+first_name: text
+last_name: text
+father_name: text
+role: UserRoleEnum <<default: EMPLOYER>>
+is_active: bool <<default: True>>
+avatar: path
+}
+
+User }|--|| User
+
+Review }|--|| Quarter
+Review }|--|| User
+Review }|--|| User
+Review }|--|| User
+
+Review }|--|| Template
+Question }|--|| Template
+
+Answer }|--|| Question
+Answer }|--|| User
+Answer }|--|| Review
+
+DepartmentTemplate }|--|| Template
+DepartmentTemplate }|--|| Department
+
+DepartmentUser }|--|| User
+DepartmentUser }|--|| Department
+@enduml
