@@ -1,0 +1,41 @@
+name: Dev deploy
+
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    env:
+      GITHUB_ACTOR: ${{ github.actor }}
+      GITHUB_REF_NAME: ${{ github.ref }}
+      GITHUB_SHA: ${{ github.sha }}
+      GITHUB_REPOSITORY: ${{ github.repository }}
+
+      ENVIRONMENT: dev
+
+      CORS_ALLOW_ORIGIN_LIST: ${{ secrets.DEV_CORS_ALLOW_ORIGIN_LIST }}
+
+      POSTGRES_HOST: ${{ secrets.DEV_POSTGRES_HOST }}
+      POSTGRES_PORT: ${{ secrets.DEV_POSTGRES_PORT }}
+      POSTGRES_USER: ${{ secrets.DEV_POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.DEV_POSTGRES_PASSWORD }}
+      POSTGRES_DB: ${{ secrets.DEV_POSTGRES_DB }}
+
+      REDIS_DSN: ${{ secrets.DEV_REDIS_DSN }}
+
+      S3_DSN: ${{ secrets.DEV_S3_DSN }}
+      S3_ACCESS_KEY_ID: ${{ secrets.DEV_S3_ACCESS_KEY_ID }}
+      S3_SECRET_ACCESS_KEY: ${{ secrets.DEV_S3_SECRET_ACCESS_KEY }}
+      S3_REGION_NAME: ${{ secrets.DEV_S3_REGION_NAME }}
+      S3_BUCKET_NAME: ${{ secrets.DEV_S3_BUCKET_NAME }}
+
+      FILE_STORAGE_TYPE: ${{ secrets.DEV_FILE_STORAGE_TYPE }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Up containers
+        run: docker compose -f docker-compose.dev.yml -p assessment_app_dev up -d --build --remove-orphans

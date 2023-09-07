@@ -1,0 +1,12 @@
+name: Dev down with volumes
+
+on:
+  workflow_dispatch:
+
+jobs:
+  down:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v3
+      - name: Down containers
+        run: docker compose -f docker-compose.dev.yml -p assessment_app_dev down -v
