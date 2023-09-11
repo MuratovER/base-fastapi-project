@@ -9,7 +9,8 @@ Base FastAPI Project
 1. FastAPI
 2. SQLAlchemy + Alembic
 3. PostgreSQL
-4. Docker, docker compose
+4. Redis
+5. Docker
 
 ## Run
 

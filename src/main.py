@@ -6,7 +6,7 @@ from api.router import api_router
 from core.config import settings
 
 app = FastAPI(
-    title="Assessment App Backend",
+    title="Base FastAPI Project",
     openapi_url="/api/openapi.json",
     docs_url="/api/swagger",
 )

@@ -39,4 +39,4 @@ from db.models.quarter import Quarter
 from db.models.question import Question
 from db.models.review import Review
 from db.models.template import Template
-from db.models.user import User
+from db.models.example import User
